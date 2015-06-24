@@ -1,5 +1,17 @@
 # Java Client of Zalando's API
 
+This project is a Java client for the public [Zalando's API](https://github.com/zalando/shop-api-documentation). The 
+client is based on a fluent java api that maps the cascade of methods to the Zalando's api endpoints. For example:
+
+```java
+PaginableResult<Brand> brands = zalandoApi.brands().pageSize(10).name("nike").get();
+```
+Maps to the request:
+
+```shell
+curl -XGET 'https://api.zalando.com/brands?pageSize=10&name=nike'
+```
+
 ## Compilation
 
 ```shell
@@ -32,13 +44,16 @@ And then the usage is as follows:
 
 ```java
 public static void main(String[] args) throws IOException, URISyntaxException {
-    ZalandoApi zalandoApi = new ZalandoApiBuilder().setDomain(Domain.es_ES).build();
+    ZalandoApi zalandoApi = new ZalandoApiBuilder()
+                                .setDomain(Domain.es_ES)
+                                .enableHttps()
+                                .build();
     PaginableResult<Category> categories = zalandoApi.categories().pageSize(20).get();
     System.out.println(categories);
 }
 ```
 
-To use this client ina Spring application consider the following setup:
+To use this client in a Spring application consider the following setup:
 
 ```java
 @Configuration
@@ -48,6 +63,7 @@ public class ZalandoApiConfiguration {
     public ZalandoApi zalandoApi(@Value("${zalando-api.domain:es_ES}") Domain domain) {
         return new ZalandoApiBuilder()
                     .setDomain(domain)
+                    .enableHttps()
                     .build();
     }
     
