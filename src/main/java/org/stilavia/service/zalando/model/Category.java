@@ -1,0 +1,107 @@
+/*
+ * Copyright 2015 Stilavia S.L.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package org.stilavia.service.zalando.model;
+
+import java.util.List;
+
+/**
+ * Created by guillermoblascojimenez on 16/06/15.
+ */
+public class Category {
+
+    private String key;
+    private String name;
+    private String parentKey;
+    private List<String> childKeys;
+    private String type;
+    private boolean outlet;
+    private boolean hidden;
+    private String targetGroup;
+    private List<String> suggestedFilters;
+
+    public List<String> getSuggestedFilters() {
+        return suggestedFilters;
+    }
+
+    public void setSuggestedFilters(List<String> suggestedFilters) {
+        this.suggestedFilters = suggestedFilters;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getParentKey() {
+        return parentKey;
+    }
+
+    public void setParentKey(String parentKey) {
+        this.parentKey = parentKey;
+    }
+
+    public List<String> getChildKeys() {
+        return childKeys;
+    }
+
+    public void setChildKeys(List<String> childKeys) {
+        this.childKeys = childKeys;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public boolean isOutlet() {
+        return outlet;
+    }
+
+    public void setOutlet(boolean outlet) {
+        this.outlet = outlet;
+    }
+
+    public boolean isHidden() {
+        return hidden;
+    }
+
+    public void setHidden(boolean hidden) {
+        this.hidden = hidden;
+    }
+
+    public String getTargetGroup() {
+        return targetGroup;
+    }
+
+    public void setTargetGroup(String targetGroup) {
+        this.targetGroup = targetGroup;
+    }
+}
