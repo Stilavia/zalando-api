@@ -30,8 +30,8 @@ class ExecutableRequestChain<E> extends RequestChain {
     private final TypeReference<E> typeReference;
     private final URIBuilder uriBuilder;
 
-    public ExecutableRequestChain(RequestContext context, RequestChain parent, String path, TypeReference<E> typeReference) {
-        super(context, parent, path);
+    public ExecutableRequestChain(RequestChain parent, String path, TypeReference<E> typeReference) {
+        super(parent, path);
         this.uriBuilder = getContext().getUriBuilder();
         this.uriBuilder.setPath(resolvePath());
         this.typeReference = typeReference;

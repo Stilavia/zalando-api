@@ -27,17 +27,12 @@ import org.codehaus.jackson.map.ObjectMapper;
 public class ZalandoApiBuilder {
 
     private ZalandoApi.Domain domain = ZalandoApi.Domain.en_GB;
-    private String schema = "http";
+    private final String schema = "https";
     private String clientId = null;
 
     public ZalandoApiBuilder setDomain(ZalandoApi.Domain domain) {
         Preconditions.checkNotNull(domain);
         this.domain = domain;
-        return this;
-    }
-
-    public ZalandoApiBuilder enableHttps() {
-        this.schema = "https";
         return this;
     }
 

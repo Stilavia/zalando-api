@@ -17,6 +17,7 @@
 package org.stilavia.service.zalando;
 
 import com.google.common.base.Optional;
+import com.google.common.base.Preconditions;
 
 /**
  * Created by guillermoblascojimenez on 15/06/15.
@@ -30,13 +31,15 @@ class RequestChain {
     private final String path;
 
     public RequestChain(RequestContext context, String path) {
+        Preconditions.checkNotNull(context);
         this.context = context;
         this.path = path;
         this.parent = Optional.absent();
     }
 
-    public RequestChain(RequestContext context, RequestChain parent, String path) {
-        this.context = context;
+    public RequestChain(RequestChain parent, String path) {
+        Preconditions.checkNotNull(parent);
+        this.context = parent.getContext();
         this.parent = Optional.of(parent);
         this.path = path;
     }

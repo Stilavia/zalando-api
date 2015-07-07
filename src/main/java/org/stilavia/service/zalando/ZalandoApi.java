@@ -27,7 +27,7 @@ public class ZalandoApi implements Closeable {
     private final RequestContext context;
 
     public enum Domain {
-        da_DK("da_DK", "www.zalando.dk", "EU", "DKK", 25),
+        da_DK("da-DK", "www.zalando.dk", "EU", "DKK", 25),
         de_AT("de-AT", "www.zalando.at", "EU", "EUR", 20),
         de_CH("de-CH", "www.zalando.ch", "EU", "CHF", 8),
         de_DE("de-DE", "www.zalando.de", "EU", "EUR", 19),
@@ -87,6 +87,10 @@ public class ZalandoApi implements Closeable {
         return new GetArticle(context, articleId);
     }
 
+    public GetArticles articles() {
+        return new GetArticles(context);
+    }
+
     public GetBrands brands() {
         return new GetBrands(context);
     }
@@ -114,4 +118,5 @@ public class ZalandoApi implements Closeable {
     public void close() throws IOException {
         context.close();
     }
+
 }

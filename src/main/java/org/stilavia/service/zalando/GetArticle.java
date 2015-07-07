@@ -35,6 +35,27 @@ class GetArticle extends ExecutableRequestChain<Article> {
         this.articleId = articleId;
     }
 
+
+    public GetArticleMedia media() {
+        return new GetArticleMedia(this);
+    }
+
+    public GetArticleUnits units() {
+        return new GetArticleUnits(this);
+    }
+
+    public GetArticleUnit units(String unitId) {
+        return new GetArticleUnit(this, unitId);
+    }
+/*
+    public GetArticleReviews reviews() {
+
+    }
+
+    public GetArticleReviewsSummary reviewsSummary() {
+
+    }
+*/
     private static String getPath(String articleId) {
         return String.format(PATH, articleId);
     }

@@ -50,6 +50,8 @@ public static void main(String[] args) throws IOException, URISyntaxException {
                                 .build();
     PaginableResult<Category> categories = zalandoApi.categories().pageSize(20).get();
     System.out.println(categories);
+    Article article = zalandoApi.articles("TF121C066-A11").get();
+    System.out.println(article);
 }
 ```
 
