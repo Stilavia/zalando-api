@@ -22,7 +22,7 @@ import org.stilavia.service.zalando.model.Article;
 /**
  * Created by guillermoblascojimenez on 15/06/15.
  */
-class GetArticle extends ExecutableRequestChain<Article> {
+public class GetArticle extends ExecutableRequestChain<Article> {
 
     private static final String PATH = "/articles/%s";
     private static final ParameterizedTypeReference<Article> TYPE_REFERENCE = new ParameterizedTypeReference<Article>() {
