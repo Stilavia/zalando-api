@@ -16,15 +16,29 @@
 
 package org.stilavia.service.zalando.model;
 
+import java.io.Serializable;
+
 /**
  * Created by guillermoblascojimenez on 16/06/15.
  */
-public class Brand {
+public class Brand implements Serializable {
+
+    private static final long serialVersionUID = 42L;
+
     private String key;
     private String name;
     private String logoUrl;
+    private String logoLargeUrl;
     private BrandFamily brandFamily;
     private String shopUrl;
+
+    public String getLogoLargeUrl() {
+        return logoLargeUrl;
+    }
+
+    public void setLogoLargeUrl(String logoLargeUrl) {
+        this.logoLargeUrl = logoLargeUrl;
+    }
 
     public String getKey() {
         return key;

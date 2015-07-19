@@ -16,75 +16,62 @@
 
 package org.stilavia.service.zalando;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.utils.URIBuilder;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.message.BasicHeader;
-import org.apache.http.util.EntityUtils;
-import org.codehaus.jackson.map.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.http.client.HttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.*;
+import org.springframework.http.client.ClientHttpRequestFactory;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.web.client.RestTemplate;
 
-import java.io.Closeable;
 import java.io.IOException;
-import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Arrays;
 
 /**
  * Created by guillermoblascojimenez on 15/06/15.
  */
-public class RequestContext implements Closeable {
+public class RequestContext {
 
-    private final String schema;
     private final String host;
-    private final ObjectMapper objectMapper;
-    private final CloseableHttpClient httpclient;
     private final ZalandoApi.Domain domain;
     private final String clientId;
+    private final HttpClient httpClient;
+    private final ClientHttpRequestFactory requestFactory;
+    private final RestTemplate restTemplate;
 
-    public RequestContext(String schema, String host, CloseableHttpClient httpclient, ObjectMapper objectMapper, ZalandoApi.Domain domain, String clientId) {
-        this.schema = schema;
+    public RequestContext(String host, ZalandoApi.Domain domain, String clientId) {
         this.host = host;
-        this.objectMapper = objectMapper;
-        this.httpclient = httpclient;
         this.domain = domain;
         this.clientId = clientId;
+        this.httpClient = HttpClientBuilder.create().build();
+        this.requestFactory= new HttpComponentsClientHttpRequestFactory(httpClient);
+        restTemplate = new RestTemplate(requestFactory);
+        restTemplate.setMessageConverters(Arrays.<HttpMessageConverter<?>>asList(new MappingJackson2HttpMessageConverter(new ObjectMapper())));
+
     }
 
-    public URIBuilder getUriBuilder() {
-        return new URIBuilder()
-                .setScheme(schema)
-                .setHost(host);
+    public RestUriBuilder getUriBuilder() {
+        return new RestUriBuilder()
+                .protocol("https")
+                .host(host);
     }
 
-    public ObjectMapper getObjectMapper() {
-        return objectMapper;
-    }
+    public <E> E execute(RestUriBuilder uriBuilder, ParameterizedTypeReference<E> entityClass) throws IOException, URISyntaxException {
 
-    public RequestResponse execute(URIBuilder uriBuilder) throws IOException, URISyntaxException {
-        URI uri = uriBuilder.build();
-        HttpGet httpGet = new HttpGet(uri);
-        httpGet.addHeader(new BasicHeader("Accept-Language", domain.getLocale()));
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+        headers.set("Accept-Language", domain.getLocale());
+        headers.set("Accept-Encoding", "gzip,deflate");
         if (this.clientId != null) {
-            httpGet.addHeader(new BasicHeader("x-client-name", this.clientId));
+            headers.set("x-client-name", this.clientId);
         }
-        CloseableHttpResponse response = httpclient.execute(httpGet);
-        RequestResponse requestResponse;
-        try {
-            HttpEntity entity = response.getEntity();
-            int code = response.getStatusLine().getStatusCode();
-            if (code >= 400) {
-                requestResponse = new RequestResponse(code, null);
-            } else {
-                requestResponse = new RequestResponse(code, EntityUtils.toString(entity));
-            }
-        } finally {
-            response.close();
-        }
-        return requestResponse;
+        HttpEntity<E> httpEntity = new HttpEntity<E>(headers);
+        ResponseEntity<E> response = restTemplate.exchange(uriBuilder.build(), HttpMethod.GET, httpEntity, entityClass);
+        return response.getBody();
     }
 
-    public void close() throws IOException {
-        this.httpclient.close();
-    }
 }

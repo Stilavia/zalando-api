@@ -16,10 +16,14 @@
 
 package org.stilavia.service.zalando.model;
 
+import java.io.Serializable;
+
 /**
  * Created by guillermoblascojimenez on 16/06/15.
  */
-public class FilterValue {
+public class FilterValue implements Serializable {
+
+    private static final long serialVersionUID = 42L;
 
     private String key;
     private String displayName;
@@ -38,5 +42,33 @@ public class FilterValue {
 
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        FilterValue that = (FilterValue) o;
+
+        if (key != null ? !key.equals(that.key) : that.key != null) return false;
+        return !(displayName != null ? !displayName.equals(that.displayName) : that.displayName != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = key != null ? key.hashCode() : 0;
+        result = 31 * result + (displayName != null ? displayName.hashCode() : 0);
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("FilterValue{");
+        sb.append("key='").append(key).append('\'');
+        sb.append(", displayName='").append(displayName).append('\'');
+        sb.append('}');
+        return sb.toString();
     }
 }

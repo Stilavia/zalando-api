@@ -16,8 +16,7 @@
 
 package org.stilavia.service.zalando;
 
-import org.apache.http.client.utils.URIBuilder;
-import org.codehaus.jackson.type.TypeReference;
+import org.springframework.core.ParameterizedTypeReference;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -27,33 +26,28 @@ import java.net.URISyntaxException;
  */
 class ExecutableRequestChain<E> extends RequestChain {
 
-    private final TypeReference<E> typeReference;
-    private final URIBuilder uriBuilder;
+    private final ParameterizedTypeReference<E> entityClass;
+    private final RestUriBuilder uriBuilder;
 
-    public ExecutableRequestChain(RequestChain parent, String path, TypeReference<E> typeReference) {
+    public ExecutableRequestChain(RequestChain parent, String path, ParameterizedTypeReference<E> entityClass) {
         super(parent, path);
         this.uriBuilder = getContext().getUriBuilder();
-        this.uriBuilder.setPath(resolvePath());
-        this.typeReference = typeReference;
+        this.uriBuilder.path(resolvePath());
+        this.entityClass = entityClass;
     }
 
-    public ExecutableRequestChain(RequestContext context, String path, TypeReference<E> typeReference) {
+    public ExecutableRequestChain(RequestContext context, String path, ParameterizedTypeReference<E> entityClass) {
         super(context, path);
         this.uriBuilder = getContext().getUriBuilder();
-        this.uriBuilder.setPath(resolvePath());
-        this.typeReference = typeReference;
+        this.uriBuilder.path(resolvePath());
+        this.entityClass = entityClass;
     }
 
-    protected URIBuilder getUriBuilder() {
+    protected RestUriBuilder getUriBuilder() {
         return this.uriBuilder;
     }
 
     public E get() throws IOException, URISyntaxException {
-        RequestResponse response = getContext().execute(uriBuilder);
-        if (response.getResponse() != null) {
-            return getContext().getObjectMapper().readValue(response.getResponse(), typeReference);
-        } else {
-            return null;
-        }
+        return getContext().execute(uriBuilder, entityClass);
     }
 }

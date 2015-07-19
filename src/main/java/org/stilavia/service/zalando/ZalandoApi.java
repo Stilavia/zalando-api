@@ -16,13 +16,10 @@
 
 package org.stilavia.service.zalando;
 
-import java.io.Closeable;
-import java.io.IOException;
-
 /**
  * Created by guillermoblascojimenez on 15/06/15.
  */
-public class ZalandoApi implements Closeable {
+public class ZalandoApi {
 
     private final RequestContext context;
 
@@ -113,10 +110,6 @@ public class ZalandoApi implements Closeable {
 
     public GetCategories categories() {
         return new GetCategories(context);
-    }
-
-    public void close() throws IOException {
-        context.close();
     }
 
 }

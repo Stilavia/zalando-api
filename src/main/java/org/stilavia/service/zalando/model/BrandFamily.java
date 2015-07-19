@@ -16,10 +16,15 @@
 
 package org.stilavia.service.zalando.model;
 
+import java.io.Serializable;
+
 /**
  * Created by guillermoblascojimenez on 16/06/15.
  */
-public class BrandFamily {
+public class BrandFamily implements Serializable {
+
+    private static final long serialVersionUID = 42L;
+
     private String key;
     private String name;
     private String shopUrl;

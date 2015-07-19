@@ -16,7 +16,7 @@
 
 package org.stilavia.service.zalando;
 
-import org.codehaus.jackson.type.TypeReference;
+import org.springframework.core.ParameterizedTypeReference;
 import org.stilavia.service.zalando.model.Filter;
 
 /**
@@ -25,7 +25,7 @@ import org.stilavia.service.zalando.model.Filter;
 public class GetFilter extends ExecutableRequestChain<Filter> {
 
     private static final String PATH = "/filters/%s";
-    private static final TypeReference<Filter> TYPE_REFERENCE = new TypeReference<Filter>() {
+    private static final ParameterizedTypeReference<Filter> TYPE_REFERENCE = new ParameterizedTypeReference<Filter>() {
     };
 
     public GetFilter(RequestContext context, String filterName) {

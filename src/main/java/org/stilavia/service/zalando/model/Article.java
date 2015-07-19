@@ -16,13 +16,16 @@
 
 package org.stilavia.service.zalando.model;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
 /**
  * Created by guillermoblascojimenez on 15/06/15.
  */
-public class Article {
+public class Article implements Serializable {
+
+    private static final long serialVersionUID = 42L;
 
     private String id;
     private String modelId;
@@ -181,4 +184,79 @@ public class Article {
         this.attributes = attributes;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Article article = (Article) o;
+
+        if (available != article.available) return false;
+        if (id != null ? !id.equals(article.id) : article.id != null) return false;
+        if (modelId != null ? !modelId.equals(article.modelId) : article.modelId != null) return false;
+        if (name != null ? !name.equals(article.name) : article.name != null) return false;
+        if (shopUrl != null ? !shopUrl.equals(article.shopUrl) : article.shopUrl != null) return false;
+        if (color != null ? !color.equals(article.color) : article.color != null) return false;
+        if (season != null ? !season.equals(article.season) : article.season != null) return false;
+        if (seasonYear != null ? !seasonYear.equals(article.seasonYear) : article.seasonYear != null) return false;
+        if (activationDate != null ? !activationDate.equals(article.activationDate) : article.activationDate != null)
+            return false;
+        if (genders != null ? !genders.equals(article.genders) : article.genders != null) return false;
+        if (additionalInfos != null ? !additionalInfos.equals(article.additionalInfos) : article.additionalInfos != null)
+            return false;
+        if (ageGroups != null ? !ageGroups.equals(article.ageGroups) : article.ageGroups != null) return false;
+        if (brand != null ? !brand.equals(article.brand) : article.brand != null) return false;
+        if (categoryKeys != null ? !categoryKeys.equals(article.categoryKeys) : article.categoryKeys != null)
+            return false;
+        if (units != null ? !units.equals(article.units) : article.units != null) return false;
+        if (media != null ? !media.equals(article.media) : article.media != null) return false;
+        return !(attributes != null ? !attributes.equals(article.attributes) : article.attributes != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (modelId != null ? modelId.hashCode() : 0);
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (shopUrl != null ? shopUrl.hashCode() : 0);
+        result = 31 * result + (color != null ? color.hashCode() : 0);
+        result = 31 * result + (available ? 1 : 0);
+        result = 31 * result + (season != null ? season.hashCode() : 0);
+        result = 31 * result + (seasonYear != null ? seasonYear.hashCode() : 0);
+        result = 31 * result + (activationDate != null ? activationDate.hashCode() : 0);
+        result = 31 * result + (genders != null ? genders.hashCode() : 0);
+        result = 31 * result + (additionalInfos != null ? additionalInfos.hashCode() : 0);
+        result = 31 * result + (ageGroups != null ? ageGroups.hashCode() : 0);
+        result = 31 * result + (brand != null ? brand.hashCode() : 0);
+        result = 31 * result + (categoryKeys != null ? categoryKeys.hashCode() : 0);
+        result = 31 * result + (units != null ? units.hashCode() : 0);
+        result = 31 * result + (media != null ? media.hashCode() : 0);
+        result = 31 * result + (attributes != null ? attributes.hashCode() : 0);
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Article{");
+        sb.append("id='").append(id).append('\'');
+        sb.append(", modelId='").append(modelId).append('\'');
+        sb.append(", name='").append(name).append('\'');
+        sb.append(", shopUrl='").append(shopUrl).append('\'');
+        sb.append(", color='").append(color).append('\'');
+        sb.append(", available=").append(available);
+        sb.append(", season='").append(season).append('\'');
+        sb.append(", seasonYear='").append(seasonYear).append('\'');
+        sb.append(", activationDate=").append(activationDate);
+        sb.append(", genders=").append(genders);
+        sb.append(", additionalInfos=").append(additionalInfos);
+        sb.append(", ageGroups=").append(ageGroups);
+        sb.append(", brand=").append(brand);
+        sb.append(", categoryKeys=").append(categoryKeys);
+        sb.append(", units=").append(units);
+        sb.append(", media=").append(media);
+        sb.append(", attributes=").append(attributes);
+        sb.append('}');
+        return sb.toString();
+    }
 }

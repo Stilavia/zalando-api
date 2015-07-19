@@ -16,7 +16,7 @@
 
 package org.stilavia.service.zalando;
 
-import org.codehaus.jackson.type.TypeReference;
+import org.springframework.core.ParameterizedTypeReference;
 import org.stilavia.service.zalando.model.Brand;
 
 /**
@@ -25,7 +25,7 @@ import org.stilavia.service.zalando.model.Brand;
 public class GetBrand extends ExecutableRequestChain<Brand> {
 
     private static final String PATH = "/brands/%s";
-    private static final TypeReference<Brand> TYPE_REFERENCE = new TypeReference<Brand>() {
+    private static final ParameterizedTypeReference<Brand> TYPE_REFERENCE = new ParameterizedTypeReference<Brand>() {
     };
 
     private final String brandKey;

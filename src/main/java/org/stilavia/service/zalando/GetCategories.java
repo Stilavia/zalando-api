@@ -16,7 +16,7 @@
 
 package org.stilavia.service.zalando;
 
-import org.codehaus.jackson.type.TypeReference;
+import org.springframework.core.ParameterizedTypeReference;
 import org.stilavia.service.zalando.model.Category;
 import org.stilavia.service.zalando.model.PaginableResult;
 
@@ -26,7 +26,7 @@ import org.stilavia.service.zalando.model.PaginableResult;
 public class GetCategories extends ExecutableRequestChain<PaginableResult<Category>> {
 
     private static final String PATH = "/categories";
-    private static final TypeReference<PaginableResult<Category>> TYPE_REFERENCE = new TypeReference<PaginableResult<Category>>() {
+    private static final ParameterizedTypeReference<PaginableResult<Category>> TYPE_REFERENCE = new ParameterizedTypeReference<PaginableResult<Category>>() {
     };
 
     public GetCategories(RequestContext context) {

@@ -16,12 +16,15 @@
 
 package org.stilavia.service.zalando.model;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by guillermoblascojimenez on 16/06/15.
  */
-public class Category {
+public class Category implements Serializable {
+
+    private static final long serialVersionUID = 42L;
 
     private String key;
     private String name;
@@ -103,5 +106,55 @@ public class Category {
 
     public void setTargetGroup(String targetGroup) {
         this.targetGroup = targetGroup;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Category category = (Category) o;
+
+        if (outlet != category.outlet) return false;
+        if (hidden != category.hidden) return false;
+        if (key != null ? !key.equals(category.key) : category.key != null) return false;
+        if (name != null ? !name.equals(category.name) : category.name != null) return false;
+        if (parentKey != null ? !parentKey.equals(category.parentKey) : category.parentKey != null) return false;
+        if (childKeys != null ? !childKeys.equals(category.childKeys) : category.childKeys != null) return false;
+        if (type != null ? !type.equals(category.type) : category.type != null) return false;
+        if (targetGroup != null ? !targetGroup.equals(category.targetGroup) : category.targetGroup != null)
+            return false;
+        return !(suggestedFilters != null ? !suggestedFilters.equals(category.suggestedFilters) : category.suggestedFilters != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = key != null ? key.hashCode() : 0;
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (parentKey != null ? parentKey.hashCode() : 0);
+        result = 31 * result + (childKeys != null ? childKeys.hashCode() : 0);
+        result = 31 * result + (type != null ? type.hashCode() : 0);
+        result = 31 * result + (outlet ? 1 : 0);
+        result = 31 * result + (hidden ? 1 : 0);
+        result = 31 * result + (targetGroup != null ? targetGroup.hashCode() : 0);
+        result = 31 * result + (suggestedFilters != null ? suggestedFilters.hashCode() : 0);
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Category{");
+        sb.append("key='").append(key).append('\'');
+        sb.append(", name='").append(name).append('\'');
+        sb.append(", parentKey='").append(parentKey).append('\'');
+        sb.append(", childKeys=").append(childKeys);
+        sb.append(", type='").append(type).append('\'');
+        sb.append(", outlet=").append(outlet);
+        sb.append(", hidden=").append(hidden);
+        sb.append(", targetGroup='").append(targetGroup).append('\'');
+        sb.append(", suggestedFilters=").append(suggestedFilters);
+        sb.append('}');
+        return sb.toString();
     }
 }

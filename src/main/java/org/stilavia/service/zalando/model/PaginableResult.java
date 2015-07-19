@@ -16,12 +16,16 @@
 
 package org.stilavia.service.zalando.model;
 
+import java.io.Serializable;
+import java.util.Iterator;
 import java.util.List;
 
 /**
  * Created by guillermoblascojimenez on 16/06/15.
  */
-public class PaginableResult<E> {
+public class PaginableResult<E> implements Iterable<E>, Serializable {
+
+    private static final long serialVersionUID = 42L;
 
     private List<E> content;
     private int totalElements;
@@ -67,5 +71,46 @@ public class PaginableResult<E> {
 
     public void setSize(int size) {
         this.size = size;
+    }
+
+    public Iterator<E> iterator() {
+        return content.iterator();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        PaginableResult<?> that = (PaginableResult<?>) o;
+
+        if (totalElements != that.totalElements) return false;
+        if (totalPages != that.totalPages) return false;
+        if (page != that.page) return false;
+        if (size != that.size) return false;
+        return !(content != null ? !content.equals(that.content) : that.content != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = content != null ? content.hashCode() : 0;
+        result = 31 * result + totalElements;
+        result = 31 * result + totalPages;
+        result = 31 * result + page;
+        result = 31 * result + size;
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("PaginableResult{");
+        sb.append("content=").append(content);
+        sb.append(", totalElements=").append(totalElements);
+        sb.append(", totalPages=").append(totalPages);
+        sb.append(", page=").append(page);
+        sb.append(", size=").append(size);
+        sb.append('}');
+        return sb.toString();
     }
 }

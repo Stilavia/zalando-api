@@ -16,7 +16,7 @@
 
 package org.stilavia.service.zalando;
 
-import org.codehaus.jackson.type.TypeReference;
+import org.springframework.core.ParameterizedTypeReference;
 import org.stilavia.service.zalando.model.Article;
 
 /**
@@ -25,7 +25,7 @@ import org.stilavia.service.zalando.model.Article;
 class GetArticle extends ExecutableRequestChain<Article> {
 
     private static final String PATH = "/articles/%s";
-    private static final TypeReference<Article> TYPE_REFERENCE = new TypeReference<Article>() {
+    private static final ParameterizedTypeReference<Article> TYPE_REFERENCE = new ParameterizedTypeReference<Article>() {
     };
 
     private final String articleId;

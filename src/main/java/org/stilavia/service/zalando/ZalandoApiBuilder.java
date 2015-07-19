@@ -17,9 +17,6 @@
 package org.stilavia.service.zalando;
 
 import com.google.common.base.Preconditions;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.codehaus.jackson.map.ObjectMapper;
 
 /**
  * Created by guillermoblascojimenez on 15/06/15.
@@ -27,7 +24,6 @@ import org.codehaus.jackson.map.ObjectMapper;
 public class ZalandoApiBuilder {
 
     private ZalandoApi.Domain domain = ZalandoApi.Domain.en_GB;
-    private final String schema = "https";
     private String clientId = null;
 
     public ZalandoApiBuilder setDomain(ZalandoApi.Domain domain) {
@@ -42,9 +38,7 @@ public class ZalandoApiBuilder {
     }
 
     public ZalandoApi build() {
-        CloseableHttpClient httpClient = HttpClients.createDefault();
-        ObjectMapper objectMapper = new ObjectMapper();
-        RequestContext context = new RequestContext(schema, "api.zalando.com", httpClient, objectMapper, domain, clientId);
+        RequestContext context = new RequestContext("api.zalando.com", domain, clientId);
         return new ZalandoApi(context);
     }
 }
