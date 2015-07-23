@@ -20,9 +20,9 @@ import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by guillermoblascojimenez on 19/07/15.
@@ -32,7 +32,7 @@ public class RestUriBuilder {
     private String host;
     private String protocol = "http";
     private StringBuilder path;
-    private Map<String, String> parameters = new HashMap<String, String>();
+    private Map<String, List<String>> parameters = new HashMap<String, List<String>>();
 
     public RestUriBuilder host(String host) {
         Preconditions.checkNotNull(host);
@@ -60,9 +60,18 @@ public class RestUriBuilder {
     }
 
     public RestUriBuilder addParameter(String key, Object value) {
+        return addParameters(key, Collections.singletonList(value));
+    }
+
+    public RestUriBuilder addParameters(String key, Collection<?> value) {
         Preconditions.checkNotNull(key);
         Preconditions.checkNotNull(value);
-        this.parameters.put(key, String.valueOf(value));
+        Iterable<String> stringValues = Iterables.transform(value, new Function<Object, String>() {
+            public String apply(Object o) {
+                return String.valueOf(o);
+            }
+        });
+        this.parameters.put(key, Lists.newArrayList(stringValues));
         return this;
     }
 
@@ -76,9 +85,13 @@ public class RestUriBuilder {
         builder.append(path);
         if (!parameters.isEmpty()) {
             builder.append("?");
-            Joiner.on("&").appendTo(builder, Iterables.transform(parameters.entrySet(), new Function<Map.Entry<String,String>, Object>() {
-                public Object apply(Map.Entry<String, String> stringStringEntry) {
-                    return stringStringEntry.getKey() + "=" + stringStringEntry.getValue();
+            Joiner.on("&").appendTo(builder, Iterables.transform(parameters.entrySet(), new Function<Map.Entry<String,List<String>>, String>() {
+                public String apply(final Map.Entry<String, List<String>> stringStringEntry) {
+                    return Joiner.on("&").join(Lists.transform(stringStringEntry.getValue(), new Function<String, String>() {
+                        public String apply(String s) {
+                            return stringStringEntry.getKey() + "=" + s;
+                        }
+                    }));
                 }
             }));
         }

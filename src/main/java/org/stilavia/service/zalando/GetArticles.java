@@ -20,6 +20,9 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.stilavia.service.zalando.model.Article;
 import org.stilavia.service.zalando.model.PaginableResult;
 
+import java.util.Arrays;
+import java.util.Collection;
+
 /**
  * Created by guillermoblascojimenez on 04/07/15.
  */
@@ -46,5 +49,14 @@ public class GetArticles extends ExecutableRequestChain<PaginableResult<Article>
     public GetArticles name(String name) {
         super.getUriBuilder().addParameter("name", name);
         return this;
+    }
+
+    public GetArticles articlesId(Collection<String> ids) {
+        super.getUriBuilder().addParameters("articleId", ids);
+        return this;
+    }
+
+    public GetArticles articlesId(String ... ids) {
+        return this.articlesId(Arrays.asList(ids));
     }
 }

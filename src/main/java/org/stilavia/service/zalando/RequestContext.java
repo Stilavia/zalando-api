@@ -71,6 +71,7 @@ public class RequestContext {
         }
         HttpEntity<E> httpEntity = new HttpEntity<E>(headers);
         ResponseEntity<E> response = restTemplate.exchange(uriBuilder.build(), HttpMethod.GET, httpEntity, entityClass);
+
         return response.getBody();
     }
 
