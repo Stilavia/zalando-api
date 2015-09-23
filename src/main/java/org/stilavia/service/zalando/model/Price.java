@@ -17,6 +17,7 @@
 package org.stilavia.service.zalando.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 /**
  * Created by guillermoblascojimenez on 04/07/15.
@@ -26,7 +27,7 @@ public class Price implements Serializable {
     private static final long serialVersionUID = 42L;
 
     private String currency;
-    private double value;
+    private BigDecimal value;
     private String formatted;
 
     public Price() {
@@ -40,11 +41,11 @@ public class Price implements Serializable {
         this.currency = currency;
     }
 
-    public double getValue() {
+    public BigDecimal getValue() {
         return value;
     }
 
-    public void setValue(double value) {
+    public void setValue(BigDecimal value) {
         this.value = value;
     }
 
@@ -63,7 +64,7 @@ public class Price implements Serializable {
 
         Price price = (Price) o;
 
-        if (Double.compare(price.value, value) != 0) return false;
+        if (value.compareTo(price.value) != 0) return false;
         if (currency != null ? !currency.equals(price.currency) : price.currency != null) return false;
         return !(formatted != null ? !formatted.equals(price.formatted) : price.formatted != null);
 
@@ -74,7 +75,7 @@ public class Price implements Serializable {
         int result;
         long temp;
         result = currency != null ? currency.hashCode() : 0;
-        temp = Double.doubleToLongBits(value);
+        temp = Double.doubleToLongBits(value.doubleValue());
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         result = 31 * result + (formatted != null ? formatted.hashCode() : 0);
         return result;
