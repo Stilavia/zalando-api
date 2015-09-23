@@ -16,15 +16,20 @@
 
 package org.stilavia.service.zalando;
 
+import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
+import org.springframework.web.client.RestTemplate;
 
 /**
  * Created by guillermoblascojimenez on 15/06/15.
  */
 public class ZalandoApiBuilder {
 
+    private static final String ZALANDO_API_DNS = "api.zalando.com";
+
     private ZalandoApi.Domain domain = ZalandoApi.Domain.en_GB;
-    private String clientId = null;
+    private Optional<String> clientId = Optional.absent();
+    private Optional<RestTemplate> restTemplate = Optional.absent();
 
     public ZalandoApiBuilder setDomain(ZalandoApi.Domain domain) {
         Preconditions.checkNotNull(domain);
@@ -33,12 +38,22 @@ public class ZalandoApiBuilder {
     }
 
     public ZalandoApiBuilder setClientId(String clientId) {
-        this.clientId = clientId;
+        this.clientId = Optional.of(clientId);
+        return this;
+    }
+
+    public ZalandoApiBuilder setRestTemplate(RestTemplate restTemplate) {
+        this.restTemplate = Optional.of(restTemplate);
         return this;
     }
 
     public ZalandoApi build() {
-        RequestContext context = new RequestContext("api.zalando.com", domain, clientId);
-        return new ZalandoApi(context);
+        RequestContext context;
+        if (restTemplate.isPresent()) {
+            context = new RequestContext(ZALANDO_API_DNS, domain.getLocale(), clientId, restTemplate.get());
+        } else {
+            context = new RequestContext(ZALANDO_API_DNS, domain.getLocale(), clientId);
+        }
+        return new ZalandoApi(context, domain);
     }
 }

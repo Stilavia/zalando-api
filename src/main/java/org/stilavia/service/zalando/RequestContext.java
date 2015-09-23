@@ -17,6 +17,8 @@
 package org.stilavia.service.zalando;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.base.Optional;
+import com.google.common.base.Preconditions;
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.springframework.core.ParameterizedTypeReference;
@@ -37,21 +39,32 @@ import java.util.Arrays;
 public class RequestContext {
 
     private final String host;
-    private final ZalandoApi.Domain domain;
-    private final String clientId;
-    private final HttpClient httpClient;
-    private final ClientHttpRequestFactory requestFactory;
+    private final String locale;
+    private final Optional<String> clientId;
     private final RestTemplate restTemplate;
 
-    public RequestContext(String host, ZalandoApi.Domain domain, String clientId) {
+    public RequestContext(String host, String locale, Optional<String> clientId, RestTemplate restTemplate) {
+        Preconditions.checkNotNull(host);
+        Preconditions.checkArgument(!host.isEmpty());
+        Preconditions.checkNotNull(locale);
+        Preconditions.checkNotNull(clientId);
+        Preconditions.checkNotNull(restTemplate);
         this.host = host;
-        this.domain = domain;
+        this.locale = locale;
         this.clientId = clientId;
-        this.httpClient = HttpClientBuilder.create().build();
-        this.requestFactory= new HttpComponentsClientHttpRequestFactory(httpClient);
-        restTemplate = new RestTemplate(requestFactory);
-        restTemplate.setMessageConverters(Arrays.<HttpMessageConverter<?>>asList(new MappingJackson2HttpMessageConverter(new ObjectMapper())));
+        this.restTemplate = restTemplate;
+    }
 
+    public RequestContext(String host, String locale, Optional<String> clientId) {
+        this(host, locale, clientId, buildRestTemplate());
+    }
+
+    public RequestContext(String host, String locale, String clientId) {
+        this(host, locale, Optional.of(clientId));
+    }
+
+    public RequestContext(String host, String locale) {
+        this(host, locale, Optional.<String>absent(), buildRestTemplate());
     }
 
     public RestUriBuilder getUriBuilder() {
@@ -60,14 +73,16 @@ public class RequestContext {
                 .host(host);
     }
 
+
+
     public <E> E execute(RestUriBuilder uriBuilder, ParameterizedTypeReference<E> entityClass) throws IOException, URISyntaxException {
 
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-        headers.set("Accept-Language", domain.getLocale());
+        headers.set("Accept-Language", locale);
         headers.set("Accept-Encoding", "gzip,deflate");
-        if (this.clientId != null) {
-            headers.set("x-client-name", this.clientId);
+        if (this.clientId.isPresent()) {
+            headers.set("x-client-name", this.clientId.get());
         }
         HttpEntity<E> httpEntity = new HttpEntity<E>(headers);
         ResponseEntity<E> response = restTemplate.exchange(uriBuilder.build(), HttpMethod.GET, httpEntity, entityClass);
@@ -75,4 +90,15 @@ public class RequestContext {
         return response.getBody();
     }
 
+    RestTemplate getRestTemplate() {
+        return restTemplate;
+    }
+
+    private static RestTemplate buildRestTemplate() {
+        HttpClient httpClient = HttpClientBuilder.create().build();
+        ClientHttpRequestFactory requestFactory= new HttpComponentsClientHttpRequestFactory(httpClient);
+        RestTemplate restTemplate = new RestTemplate(requestFactory);
+        restTemplate.setMessageConverters(Arrays.<HttpMessageConverter<?>>asList(new MappingJackson2HttpMessageConverter(new ObjectMapper())));
+        return restTemplate;
+    }
 }

@@ -16,12 +16,19 @@
 
 package org.stilavia.service.zalando;
 
+import org.stilavia.service.zalando.model.Article;
+import org.stilavia.service.zalando.model.PaginableResult;
+
+import java.io.IOException;
+import java.net.URISyntaxException;
+
 /**
  * Created by guillermoblascojimenez on 15/06/15.
  */
 public class ZalandoApi {
 
     private final RequestContext context;
+    private final Domain domain;
 
     public enum Domain {
         da_DK("da-DK", "www.zalando.dk", "EU", "DKK", 25),
@@ -76,8 +83,9 @@ public class ZalandoApi {
         }
     }
 
-    public ZalandoApi(RequestContext context) {
+    public ZalandoApi(RequestContext context, Domain domain) {
         this.context = context;
+        this.domain = domain;
     }
 
     public GetArticle articles(String articleId) {
@@ -110,6 +118,20 @@ public class ZalandoApi {
 
     public GetCategories categories() {
         return new GetCategories(context);
+    }
+
+    public Domain getDomain() {
+        return domain;
+    }
+
+    RequestContext getContext() {
+        return context;
+    }
+
+    public static void main(String[] args) throws IOException, URISyntaxException {
+        ZalandoApi zalandoApi = new ZalandoApiBuilder().build();
+        PaginableResult<Article> articles = zalandoApi.articles().articlesId("N1241A0A5-A12", "N1241A0A5-A11").get();
+        System.out.print(articles);
     }
 
 }
