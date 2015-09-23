@@ -7,6 +7,7 @@ import org.springframework.test.web.client.MockRestServiceServer;
 import org.stilavia.service.zalando.model.Article;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.net.URISyntaxException;
 import java.util.Collections;
 
@@ -70,7 +71,7 @@ public class GetArticleTest {
 
 
 
-            assertEquals(38.5, article.getUnits().get(0).getPrice().getValue(), 0.00001);
+            assertTrue(BigDecimal.valueOf(38.5).compareTo(article.getUnits().get(0).getPrice().getValue()) == 0);
 
     }
 
